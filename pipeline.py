@@ -20,6 +20,15 @@ class MusicGeneratorSession:
         self.last_audio_path = f"audio_{session_id}.wav"
         self.last_visual_options = []
 
+        self.response_data = {
+            "session_id": self.session_id,
+            "audio_url": None,
+            "questions": None,
+            "image_choices": None,
+            "step": self.step_counter,
+            "message": ""
+        }
+
         self.image=None
         
         # Chargement unique des modèles via la classe
@@ -128,19 +137,18 @@ class MusicGeneratorSession:
         
         self.last_visual_options = image_paths
         return image_paths
+    
+    def choose_visual_option(self, choice_index,images_paths):
+        """L'utilisateur choisit une des options visuelles, on l'analyse pour affiner le prompt."""
+        if 0 <= choice_index < len(images_paths):
+            return images_paths[choice_index]
+        else:
+            raise ValueError("Invalid choice index")
 
-    def advance_generation(self, user_input, image_path=None):
+    def advance_generation(self, user_input, image_path=None):#recupere image_path avec choose_visual_option issu de generate_visual_choices
         """
         Méthode principale : fait progresser le projet selon le compteur.
         """
-        response_data = {
-            "session_id": self.session_id,
-            "audio_url": None,
-            "questions": None,
-            "step": self.step_counter,
-            "message": ""
-        }
-
         if self.step_counter == 0:
             # PREMIÈRE GÉNÉRATION
             if image_path:
@@ -152,7 +160,8 @@ class MusicGeneratorSession:
             questions = self.get_refinement_questions(self.current_prompt)
             
             self.step_counter += 1
-            response_data.update({
+
+            self.response_data.update({
                 "audio_url": audio_path,
                 "questions": questions,
                 "step": self.step_counter,
@@ -162,6 +171,7 @@ class MusicGeneratorSession:
         elif self.step_counter >= 1:
             # AMÉLIORATION CONTINUE
             self.history.append(self.current_prompt)
+
             # On enrichit le prompt avec le feedback
             current_input=None
             if image_path:
@@ -176,7 +186,7 @@ class MusicGeneratorSession:
             questions = self.get_refinement_questions(self.current_prompt)
             
             self.step_counter += 1
-            response_data.update({
+            self.response_data.update({
                 "audio_url": audio_path,
                 "questions": questions,
                 "image_choices": self.generate_visual_choices(self.current_prompt) if self.step_counter == 2 else None,
@@ -184,7 +194,7 @@ class MusicGeneratorSession:
                 "message": f"Version {self.step_counter} prête !"
             })
 
-        return response_data
+        return self.response_data
     
 if __name__ == "__main__":
     # Test rapide
