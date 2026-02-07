@@ -1,0 +1,19 @@
+.DS_Store
+.DS_Store
+# macOS
+.DS_Store
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual envs
+.venv/
+venv/
+env/
+
+# Project-local venv (nested)
+moment-music/.venv/
+moment-music/.cache/
