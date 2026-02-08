@@ -289,8 +289,9 @@ const SonicBackbone = () => {
 
                 // On ne tente le .split() que si on a bien du texte
                 if (rawQuestions) {
+                    // On découpe via une regex plus souple (1. ou 1) ou - )
                     const qArray = rawQuestions
-                        .split(/\d\./)
+                        .split(/\d[\.\)\-]\s+/)
                         .filter(q => q.trim().length > 5)
                         .map(q => q.trim());
                     setQuestions(qArray);
@@ -305,7 +306,7 @@ const SonicBackbone = () => {
                 // On récupère les questions découpées
                 if (data.questions) {
                     const qArray = data.questions
-                        .split(/\d\./)
+                        .split(/\d[\.\)\-]\s+/)
                         .filter(q => q.trim().length > 5)
                         .map(q => q.trim());
                     setQuestions(qArray);
