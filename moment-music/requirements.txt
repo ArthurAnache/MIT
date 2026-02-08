@@ -1,9 +1,0 @@
-fastapi>=0.110
-uvicorn[standard]>=0.27
-pydantic>=2.6
-feedparser>=6.0
-python-dateutil>=2.8
-# Optional fallback (unofficial)
-pytrends>=4.9.2; platform_system != "Emscripten"
-# Tests
-pytest>=8.0
