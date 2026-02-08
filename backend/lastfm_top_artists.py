@@ -93,3 +93,29 @@ if __name__ == "__main__":
         tags = get_artist_tags(a["name"], limit=3)
         style = ", ".join(tags) if tags else "unknown style"
         print(f"{i}. {a['name']} — {style}")
+
+
+# backend/lastfm_top_artists.py
+
+def main_lastfm_top_artists(geo=None, limit=20):
+    """
+    Appelable depuis l'API.
+    Renvoie la liste des artistes trending.
+    """
+    # TON CODE EXISTANT ICI
+    # (appel API Last.fm, récupération artistes, tags, etc.)
+
+    return [
+        {
+            "name": "Kendrick Lamar",
+            "tags": ["hip hop", "rap"],
+        },
+        # ...
+    ]
+
+
+# OPTIONNEL : uniquement pour tester à la main
+if __name__ == "__main__":
+    res = main_lastfm_top_artists()
+    print(res[:3])
+

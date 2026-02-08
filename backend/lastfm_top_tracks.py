@@ -73,13 +73,16 @@ def get_artist_tags(artist: str, limit: int = 3) -> list[str]:
         return []
 
 
-if __name__ == "__main__":
-    # Choose ONE:
-    top = get_top_tracks(limit=10)  # global
-    # top = get_top_tracks(limit=10, country="United States")  # by country
+def main_lastfm_top_tracks(geo: str | None = None, limit: int = 20) -> list[dict]:
+    """
+    Appelable depuis l'API (Flask).
+    Renvoie une liste de tracks trending avec tags.
+    """
+    # Ta fonction existante utilise le paramètre "country"
+    top = get_top_tracks(limit=limit, country=geo)
 
-    print("\nTop 10 trending tracks:\n")
-    for i, item in enumerate(top, start=1):
+    out = []
+    for item in top:
         track = item["track"]
         artist = item["artist"]
 
@@ -87,5 +90,18 @@ if __name__ == "__main__":
         if not tags:
             tags = get_artist_tags(artist, limit=3)
 
-        style = ", ".join(tags) if tags else "unknown style"
-        print(f"{i}. {track} — {artist} — {style}")
+        out.append({
+            "track": track,
+            "artist": artist,
+            "tags": tags,
+        })
+    return out
+
+
+if __name__ == "__main__":
+    # Debug local uniquement (ne gêne pas Flask)
+    res = main_lastfm_top_tracks(geo=None, limit=10)
+    print("\nTop 10 trending tracks (debug):\n")
+    for i, t in enumerate(res, start=1):
+        style = ", ".join(t["tags"]) if t["tags"] else "unknown style"
+        print(f"{i}. {t['track']} — {t['artist']} — {style}")

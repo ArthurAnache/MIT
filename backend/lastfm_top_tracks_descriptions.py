@@ -184,3 +184,39 @@ if __name__ == "__main__":
 
         print(f"{i}. {track} — {artist}")
         print(f"   {desc}\n")
+
+
+# backend/lastfm_top_tracks_descriptions.py
+
+from lastfm_top_tracks import main_lastfm_top_tracks
+
+def main_lastfm_top_tracks_descriptions(geo=None, limit=20):
+    """
+    Appelable depuis l'API.
+    Renvoie tracks + prompt MusicGen.
+    """
+    tracks = main_lastfm_top_tracks(geo=geo, limit=limit)
+
+    out = []
+    for t in tracks:
+        prompt = (
+            f"Generate an original instrumental track inspired by "
+            f"{t['artist']} - {t['track']}.\n"
+            f"Genres: {' / '.join(t['tags'])}.\n"
+            f"Energy: high. Mood: modern.\n"
+            f"No vocals."
+        )
+
+        out.append({
+            "track": t["track"],
+            "artist": t["artist"],
+            "tags": t["tags"],
+            "musicgen_prompt": prompt,
+        })
+
+    return out
+
+
+if __name__ == "__main__":
+    res = main_lastfm_top_tracks_descriptions()
+    print(res[0]["musicgen_prompt"])
