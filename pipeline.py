@@ -7,7 +7,7 @@ from PIL import Image
 from transformers import BlipProcessor, BlipForConditionalGeneration
 
 # On garde le cache en dehors ou en attribut de classe pour ne pas recharger les modèles
-MODELS_CACHE = {"music_model": None, "music_processor": None, "llm_pipe": None}
+MODELS_CACHE = {"music_model": None, "music_processor": None, "llm_pipe": None, "blip_model":None, "blip_processor":None, "sd_pipe": None}
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 DTYPE = torch.float16 if DEVICE == "cuda" else torch.float32
 
